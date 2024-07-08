@@ -4,13 +4,13 @@ const Task = require(`../src/models/Task`)
 ///////////////////////////////////////////////////////////////////////////
 
 const createNewTask = async (req, res) => {
-    const { title, description, finished, importanceLevel } = req.body
+    const { title, description, importanceLevel } = req.body
 
-    if (!title || !finished || !importanceLevel) {
+    if (!title || !importanceLevel) {
         return res.status(400).json({ message: 'Invalid input data' })
     }
 
-    const task = await Task.create({ title, description, finished, importanceLevel })
+    const task = await Task.create({ title, description, importanceLevel })
 
     if (task)
         return res.status(201).json({ message: 'new Task created!' })
@@ -19,7 +19,7 @@ const createNewTask = async (req, res) => {
 
 ///////////////////////////////////////////////////////////////////////////
 
-const updateCount = async (req, res) => {
+const updateTask = async (req, res) => {
     const { _id, title, description, finished, importanceLevel } = req.body
 
     if (!_id)
@@ -90,7 +90,7 @@ module.exports = {
 
     createNewTask,
 
-    updateCount,
+    updateTask,
 
     getTaskByParameters,
 
