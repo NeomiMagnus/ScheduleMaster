@@ -7,7 +7,7 @@ const createNewTask = async (req, res) => {
     const { title, description, importanceLevel } = req.body
 
     if (!title || !importanceLevel) {
-        return res.status(400).json({ message: 'Invalid input data' })
+        return res.status(500).json({ message: 'Invalid input data' })
     }
 
     const task = await Task.create({ title, description, importanceLevel })
@@ -23,12 +23,12 @@ const updateTask = async (req, res) => {
     const { _id, title, description, finished, importanceLevel } = req.body
 
     if (!_id)
-        return res.status(400).json({ message: 'Invalid input data' })
+        return res.status(500).json({ message: 'Invalid input data' })
 
     const task = await Task.findOne({ _id: req._id }).exec()
 
     if (!task)
-        return res.status(404).json({ message: 'No task found' })
+        return res.status(204).json({ message: 'No task found' })
 
     task.title = title || task.title
     task.description = description || task.description
@@ -73,11 +73,13 @@ console.log("getTaskByParameters");
 const deleteTask = async (req, res) => {
 
     const { _id } = req.body
+    if (!_id)
+        return res.status(500).json({ message: 'Invalid input data' })
 
     const task = await Task.findById(_id).exec()
 
     if (!task)
-        return res.status(404).json({ message: 'Task not found' })
+        return res.status(204).json({ message: 'Task not found' })
 
     const result = await Task.deleteOne(task)
 
